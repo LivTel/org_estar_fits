@@ -1,25 +1,29 @@
 // FITSImage.java
-// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSImage.java,v 1.1 2003-03-03 11:39:32 cjm Exp $
+// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSImage.java,v 1.2 2003-05-19 15:09:11 cjm Exp $
 package org.estar.fits;
 
+import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import org.eso.fits.*;
+import org.estar.astrometry.*;
 
 /**
  * This class loads FITS image headers and data, and produces objects suitable for
  * hooking into java.awt for creating FITS images.
+ * A MemoryImageSource can be returned. There are various ulility routine for pixel <-> RA/Dec conversion
+ * (assuming linear plate scaling), and access routines to various fits header data.
  * @author Chris Mottram
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class FITSImage
 {
 	/**
 	 * Revision control system version id.
 	 */
-	public final static String RCSID = "$Id: FITSImage.java,v 1.1 2003-03-03 11:39:32 cjm Exp $";
+	public final static String RCSID = "$Id: FITSImage.java,v 1.2 2003-05-19 15:09:11 cjm Exp $";
 	/**
 	 * Width of image.
 	 */
@@ -46,6 +50,30 @@ public class FITSImage
 	 * when creating output image sources.
 	 */
 	float maxPixelValue = 0.0f;
+	/**
+	 * Field centre RA. From FCRA keyword.
+	 */
+	RA fcRA = null;
+	/**
+	 * Field centre Dec. From FCDEC keyword.
+	 */
+	Dec fcDec = null;
+	/**
+	 * Plate scale - arc-sec/pixel. From XPS keyword.
+	 */
+	double xPlateScale = 0.0;
+	/**
+	 * Plate scale - arc-sec/pixel. From YPS keyword.
+	 */
+	double yPlateScale = 0.0;
+	/**
+	 * The name of the object on this frame. From OBJECT keyword.
+	 */
+	String objectName = null;
+	/**
+	 * The date the data was taken.
+	 */
+	Date dateObs = null;
 
 	/**
 	 * Default constructor.
@@ -61,12 +89,11 @@ public class FITSImage
 	 * @see #fitsFile
 	 * @see #load(FitsFile)
 	 */
-	/* diddly
 	public void load(String filename) throws IOException,FITSException
 	{
 		try
 		{
-			fitsFile = new FitsFile(filename,true);
+			fitsFile = new FitsFile(new RandomAccessFile(filename,"r"),true);
 			load(fitsFile);
 		}
 		catch(FitsException e)
@@ -74,7 +101,6 @@ public class FITSImage
 			throw new FITSException(this.getClass().getName()+":load:"+e);
 		}
 	}
-	*/
 
 	/**
 	 * Load FITS image.
@@ -153,6 +179,194 @@ public class FITSImage
 		return maxPixelValue;
 	}
 
+	public int getWidth()
+	{
+		return width;
+	}
+
+	public int getHeight()
+	{
+		return height;
+	}
+
+	public RA getFCRA()
+	{
+		return fcRA;
+	}
+
+	public Dec getFCDec()
+	{
+		return fcDec;
+	}
+
+	public double getXPlateScale()
+	{
+		return xPlateScale;
+	}
+
+	public double getYPlateScale()
+	{
+		return yPlateScale;
+	}
+
+	/**
+	 * Gets position on sky, given x and y pixel coords.
+	 * @param x X pos.
+	 * @param y Y pos.
+	 * @return An instance of CelestialObject is returned. Only the RA and Dec fields are set.
+	 *       null can be returned.
+	 */
+	public CelestialObject getPosition(int x,int y)
+	{
+		CelestialObject co = null;
+		RA newRA = null;
+		Dec newDec = null;
+		double xpixoff,ypixoff;
+		double xas,yas;
+
+		if(x < 0)
+			return null;
+		if(y < 0)
+			return null;
+		if(x > width)
+			return null;
+		if(y > height)
+			return null;
+		if(fcRA == null)
+			return null;
+		if(fcDec == null)
+			return null;
+		xpixoff = (double)(width/2)-x;
+		ypixoff = (double)(height/2)-y;
+		xas = fcRA.toArcSeconds();
+		yas = fcDec.toArcSeconds();
+		xas += xpixoff*xPlateScale;
+		yas += ypixoff*yPlateScale;
+		co = new CelestialObject();
+		newRA = new RA();
+		newDec = new Dec();
+		newRA.fromArcSeconds(xas);
+		newDec.fromArcSeconds(yas);
+		co.setRA(newRA);
+		co.setDec(newDec);
+		return co;
+	}
+
+	/**
+	 * Gets position on image, given sky coords. Assumes linear fit from FCRA/FCDEC,atm.
+	 * @param ra X pos.
+	 * @param dec Y pos.
+	 * @return An instance of Point is returned. 
+	 */
+	public Point getPosition(RA ra,Dec dec)
+	{
+		Point p = null;
+		double cx,cy,raoff,decoff;
+		double xas,yas,cxas,cyas;
+
+		if(ra == null)
+			return null;
+		if(dec == null)
+			return null;
+		if(fcRA == null)
+			return null;
+		if(fcDec == null)
+			return null;
+		cx = (double)(width/2);
+		cy = (double)(height/2);
+		xas = ra.toArcSeconds();
+		yas = dec.toArcSeconds();
+		cxas = fcRA.toArcSeconds();
+		cyas = fcDec.toArcSeconds();
+		raoff = xas-cxas;
+		decoff = yas-cyas;
+		p = new Point();
+		p.x = (int)((raoff/xPlateScale)+cx);
+		p.y = (int)((decoff/yPlateScale)+cy);
+		return p;
+	}
+
+	/**
+	 * Gets the original data array value at the specified  x and y location.
+	 * @param x The x position on the displayed image.
+	 * @param y The y position on the displayed image. Note this is the height minus
+	 *          the y position in the array, as the display image is inverted in y.
+	 * @return The value in the data array, or 0.0 if the x and y values are out of range.
+	 */
+	public double getValue(int x,int y)
+	{
+		double value;
+		int dataArrayIndex,nvals;
+
+		dataArrayIndex = ((height-(y+1))*width)+x;
+		nvals = width * height;
+		if((dataArrayIndex < 0)||(dataArrayIndex>=nvals))
+			return 0.0;
+		return dataArray[dataArrayIndex];
+	}
+
+	/**
+	 * Method to get the radius of the field from it's centre, in arc-seconds.
+	 * This is done by computing the field size in each axis, and calculating the hypoteneuse
+	 * to get the radius to the corner.
+	 * @return The radius from the centre of the field to one corner, in arc-seconds.
+	 * @see #getFieldSizeX
+	 * @see #getFieldSizeY
+	 */
+	public double getFieldRadius()
+	{
+		double fsx,fsy;
+		double radius;
+
+		fsx = getFieldSizeX();
+		fsy = getFieldSizeY();
+		// calculate hypoteneuse to corner of field.
+		radius = Math.sqrt((fsx*fsx)+(fsy*fsy));
+		return radius;
+	}
+
+	/**
+	 * Method to get the field size (X) using width,xPlateScale.
+	 * @return The field size in X, in arc-seconds.
+	 * @see #width
+	 * @see #xPlateScale
+	 */
+	public double getFieldSizeX()
+	{
+		return ((double)width)*xPlateScale;
+	}
+
+	/**
+	 * Method to get the field size (Y) using height,yPlateScale.
+	 * @return The field size in Y, in arc-seconds.
+	 * @see #height
+	 * @see #yPlateScale
+	 */
+	public double getFieldSizeY()
+	{
+		return ((double)height)*yPlateScale;
+	}
+
+	/**
+	 * Method to get the object name, as stored in the "OBJECT" keyword in the  FITS header.
+	 * @return The object name, or null if one was not found.
+	 * @see #objectName
+	 */
+	public String getObjectName()
+	{
+		return objectName;
+	}
+
+	/**
+	 * Method to get the time of observation, as stored in the "DATE-OBS" keyword in the  FITS header.
+	 * @return The time of observation, or null if one was not found.
+	 * @see #dateObs
+	 */
+	public Date getDateObs()
+	{
+		return dateObs;
+	}
+
 	/**
 	 * Create a memory image source model suitable for creating an image from.
 	 * @return The memory image source.
@@ -166,6 +380,8 @@ public class FITSImage
 
 	/**
 	 * Create a memory image source model suitable for creating an image from.
+	 * We flip the input data array in Y, to get the output with North at the top.
+	 * A greyscale non-transparent image source is returned.
 	 * @param minValue Any dataArray pixel values less than this value are treated as black.
 	 * @param maxValue Any dataArray pixel values greater than this value are treated as white.
 	 * @return The memory image source.
@@ -178,21 +394,27 @@ public class FITSImage
 		int pixels[];
 		float scaleValue;
 		int nvals;
-		int value;
+		int value,dataArrayIndex,pixelsIndex;
 
 		nvals = width * height;
 		scaleValue = 255.0f / (maxValue-minValue);
 		pixels = new int[nvals];
-		for(int i = 0;i < nvals; i++)
+		for(int y=0;y < height; y++)
 		{
-			if(dataArray[i] < minValue)
-				value = 0;
-			else if(dataArray[i] > maxValue)
-				value = 255;
-			else
-				value = (int)((dataArray[i] - minValue) * scaleValue);
-			// pixels[] is RGB 8 bit, make greyscale
-			pixels[i] = (value << 24) | (value << 16) | value;
+			for(int x = 0;x < width; x++)
+			{
+				dataArrayIndex = (y*width)+x;
+				pixelsIndex = ((height-(y+1))*width)+x;// pixels list flipped in y
+				if(dataArray[dataArrayIndex] < minValue)
+					value = 0;
+				else if(dataArray[dataArrayIndex] > maxValue)
+					value = 255;
+				else
+					value = (int)((dataArray[dataArrayIndex] - minValue) * scaleValue);
+				// pixels[] is RGB 8 bit, make greyscale
+				// 0xAARRGGBB (AA = Alpha transarency)
+				pixels[pixelsIndex] = (255 << 24) | (value << 16) | (value << 8) | value;
+			}
 		}
 		return new MemoryImageSource(width, height, pixels, 0, width);
 	}
@@ -211,13 +433,21 @@ public class FITSImage
 	 * Method to print out a string representation of this node, with a prefix.
 	 * @param prefix A string to prefix to each line of data we print out.
 	 * @return The string.
+	 * @see #objectName
+	 * @see #fcRA
+	 * @see #fcDec
+	 * @see #width
+	 * @see #xPlateScale
+	 * @see #height
+	 * @see #yPlateScale
 	 */
 	public String toString(String prefix)
 	{
 		StringBuffer sb = null;
 		
 		sb = new StringBuffer();
-		sb.append(prefix+"FITSImage: \n");
+		sb.append(prefix+objectName+" "+fcRA+" "+fcDec+" X:"+width+" * "+xPlateScale+
+			  " Y:"+height+" * "+yPlateScale+" "+dateObs);
 		return sb.toString();
 	}
 
@@ -226,15 +456,21 @@ public class FITSImage
 	 * Method to load the data array from the specified FitsFile
 	 * @param ff the Fits File to load.
 	 * @exception FITSException Thrown if HDU type is not image, or number of axes are not 2.
+	 * @see #objectName
 	 * @see #width
 	 * @see #height
 	 * @see #dataArray
+	 * @see #fcRA
+	 * @see #fcDec
+	 * @see #xPlateScale
+	 * @see #yPlateScale
 	 */
 	protected void load(FitsFile ff) throws FITSException
 	{
 		FitsHDUnit hdu = null;
 		FitsHeader header = null;
 		FitsMatrix data = null;
+		String s = null;
 		int axes[];
 		int nvals;
 
@@ -242,6 +478,22 @@ public class FITSImage
 		header = hdu.getHeader();
 		width = header.getKeyword("NAXIS1").getInt();
 		height = header.getKeyword("NAXIS2").getInt();
+	        s = header.getKeyword("FCRA").getString();
+		if(s != null)
+		{
+			fcRA = new RA();
+			fcRA.parseSpace(s);
+		}
+	        s = header.getKeyword("FCDEC").getString();
+		if(s != null)
+		{
+			fcDec = new Dec();
+			fcDec.parseSpace(s);
+		}
+		xPlateScale = header.getKeyword("XPS").getReal();
+		yPlateScale = header.getKeyword("YPS").getReal();
+		objectName = header.getKeyword("OBJECT").getString();
+		dateObs = header.getKeyword("DATE-OBS").getDate();
 		if(hdu.getData().getType() != Fits.IMAGE)
 		{
 			throw new FITSException(this.getClass().getName()+":load:Illegal HDU type:"+
@@ -273,4 +525,7 @@ public class FITSImage
 }
 /*
 ** $Log: not supported by cvs2svn $
+** Revision 1.1  2003/03/03 11:39:32  cjm
+** Initial revision
+**
 */
