@@ -1,5 +1,5 @@
 // FITSImage.java
-// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSImage.java,v 1.2 2003-05-19 15:09:11 cjm Exp $
+// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSImage.java,v 1.3 2003-07-23 18:07:56 cjm Exp $
 package org.estar.fits;
 
 import java.awt.*;
@@ -16,14 +16,14 @@ import org.estar.astrometry.*;
  * A MemoryImageSource can be returned. There are various ulility routine for pixel <-> RA/Dec conversion
  * (assuming linear plate scaling), and access routines to various fits header data.
  * @author Chris Mottram
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class FITSImage
 {
 	/**
 	 * Revision control system version id.
 	 */
-	public final static String RCSID = "$Id: FITSImage.java,v 1.2 2003-05-19 15:09:11 cjm Exp $";
+	public final static String RCSID = "$Id: FITSImage.java,v 1.3 2003-07-23 18:07:56 cjm Exp $";
 	/**
 	 * Width of image.
 	 */
@@ -278,8 +278,8 @@ public class FITSImage
 		yas = dec.toArcSeconds();
 		cxas = fcRA.toArcSeconds();
 		cyas = fcDec.toArcSeconds();
-		raoff = xas-cxas;
-		decoff = yas-cyas;
+		raoff = cxas-xas;
+		decoff = cyas-yas;
 		p = new Point();
 		p.x = (int)((raoff/xPlateScale)+cx);
 		p.y = (int)((decoff/yPlateScale)+cy);
@@ -470,6 +470,7 @@ public class FITSImage
 		FitsHDUnit hdu = null;
 		FitsHeader header = null;
 		FitsMatrix data = null;
+		FitsKeyword keyword = null;
 		String s = null;
 		int axes[];
 		int nvals;
@@ -478,22 +479,38 @@ public class FITSImage
 		header = hdu.getHeader();
 		width = header.getKeyword("NAXIS1").getInt();
 		height = header.getKeyword("NAXIS2").getInt();
-	        s = header.getKeyword("FCRA").getString();
-		if(s != null)
+	        keyword = header.getKeyword("FCRA");
+		if(keyword != null)
 		{
-			fcRA = new RA();
-			fcRA.parseSpace(s);
+			s = keyword.getString();
+			if(s != null)
+			{
+				fcRA = new RA();
+				fcRA.parseSpace(s);
+			}
 		}
-	        s = header.getKeyword("FCDEC").getString();
-		if(s != null)
+		keyword = header.getKeyword("FCDEC");
+		if(keyword != null)
 		{
-			fcDec = new Dec();
-			fcDec.parseSpace(s);
+			s = keyword.getString();
+			if(s != null)
+			{
+				fcDec = new Dec();
+				fcDec.parseSpace(s);
+			}
 		}
-		xPlateScale = header.getKeyword("XPS").getReal();
-		yPlateScale = header.getKeyword("YPS").getReal();
-		objectName = header.getKeyword("OBJECT").getString();
-		dateObs = header.getKeyword("DATE-OBS").getDate();
+		keyword = header.getKeyword("XPS");
+		if(keyword != null)
+			xPlateScale = keyword.getReal();
+		keyword = header.getKeyword("YPS");
+		if(keyword != null)
+			yPlateScale = keyword.getReal();
+		keyword = header.getKeyword("OBJECT");
+		if(keyword != null)
+			objectName = keyword.getString();
+		keyword = header.getKeyword("DATE-OBS");
+		if(keyword != null)
+			dateObs = keyword.getDate();
 		if(hdu.getData().getType() != Fits.IMAGE)
 		{
 			throw new FITSException(this.getClass().getName()+":load:Illegal HDU type:"+
@@ -525,6 +542,9 @@ public class FITSImage
 }
 /*
 ** $Log: not supported by cvs2svn $
+** Revision 1.2  2003/05/19 15:09:11  cjm
+** First working version.
+**
 ** Revision 1.1  2003/03/03 11:39:32  cjm
 ** Initial revision
 **
