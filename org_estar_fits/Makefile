@@ -1,4 +1,4 @@
-include ../../../Makefile.common
+#include ../../../Makefile.common
 include ../Makefile.common
 #
 # Specfic options
@@ -8,7 +8,7 @@ PACKAGEDIR 	=org/$(ESTAR_NAME)/$(FITS_NAME)
 PACKAGENAME	=org.$(ESTAR_NAME).$(FITS_NAME)
 JAR_FILE	=org_$(ESTAR_NAME)_$(FITS_NAME).jar
 JAVACFLAGS 	= -d $(LIBDIR) -sourcepath ../../../ -classpath $(LIBDIR):$(CLASSPATH)
-DOCSDIR 	= /home/dev/public_html/robonet/javadocs/$(PACKAGEDIR)
+DOCSDIR 	= $(ESTAR_DOC_HOME)/javadocs/$(PACKAGEDIR)
 
 SRCS = FITSException.java FITSHeaderParser.java FITSImage.java
 OBJS = $(SRCS:%.java=$(LIBDIR)/$(PACKAGEDIR)/%.class)
