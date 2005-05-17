@@ -10,7 +10,7 @@ JAR_FILE	=org_$(ESTAR_NAME)_$(FITS_NAME).jar
 JAVACFLAGS 	= -d $(LIBDIR) -sourcepath ../../../ -classpath $(LIBDIR):$(CLASSPATH)
 DOCSDIR 	= $(ESTAR_DOC_HOME)/javadocs/$(PACKAGEDIR)
 
-SRCS = FITSException.java FITSHeaderParser.java FITSImage.java
+SRCS = FITSException.java FITSHeaderParser.java FITSHeaderLoader.java FITSImage.java
 OBJS = $(SRCS:%.java=$(LIBDIR)/$(PACKAGEDIR)/%.class)
 DOCS = $(SRCS:%.java=$(DOCSDIR)/$(PACKAGEDIR)/%.html)
 CONFIGS = jfits_environment.csh
