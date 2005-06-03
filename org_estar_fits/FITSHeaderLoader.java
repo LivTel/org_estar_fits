@@ -1,5 +1,5 @@
 // FITSHeaderLoader.java
-// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSHeaderLoader.java,v 1.2 2005-05-19 19:07:39 cjm Exp $
+// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSHeaderLoader.java,v 1.3 2005-06-03 10:29:50 cjm Exp $
 package org.estar.fits;
 
 import java.awt.*;
@@ -13,14 +13,14 @@ import org.estar.astrometry.*;
 /**
  * This class loads FITS image headers. The image data is <b>NOT</b> loaded.
  * @author Chris Mottram
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class FITSHeaderLoader
 {
 	/**
 	 * Revision control system version id.
 	 */
-	public final static String RCSID = "$Id: FITSHeaderLoader.java,v 1.2 2005-05-19 19:07:39 cjm Exp $";
+	public final static String RCSID = "$Id: FITSHeaderLoader.java,v 1.3 2005-06-03 10:29:50 cjm Exp $";
 	/**
 	 * The FITS file we are getting the header from.
 	 */
@@ -53,7 +53,7 @@ public class FITSHeaderLoader
 		}
 		catch(FitsException e)
 		{
-			throw new FITSException(this.getClass().getName()+":load:"+e);
+			throw new FITSException(this.getClass().getName()+":load:"+e,e);
 		}
 	}
 
@@ -72,7 +72,7 @@ public class FITSHeaderLoader
 		}
 		catch(FitsException e)
 		{
-			throw new FITSException(this.getClass().getName()+":load:"+e);
+			throw new FITSException(this.getClass().getName()+":load:"+e,e);
 		}
 	}
 
@@ -105,7 +105,7 @@ public class FITSHeaderLoader
 		}
 		catch(FitsException e)
 		{
-			throw new FITSException(this.getClass().getName()+":load:"+e);
+			throw new FITSException(this.getClass().getName()+":load:"+e,e);
 		}
 	}
 
@@ -251,6 +251,9 @@ public class FITSHeaderLoader
 }
 /*
 ** $Log: not supported by cvs2svn $
+** Revision 1.2  2005/05/19 19:07:39  cjm
+** Added load(File).
+**
 ** Revision 1.1  2005/05/17 14:49:17  cjm
 ** Initial revision
 **
