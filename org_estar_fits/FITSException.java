@@ -1,5 +1,5 @@
 // FITSException.java
-// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSException.java,v 1.3 2005-06-07 13:24:05 cjm Exp $
+// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSException.java,v 1.4 2005-06-07 13:47:15 cjm Exp $
 package org.estar.fits;
 
 import java.io.*;
@@ -7,14 +7,14 @@ import java.io.*;
 /**
  * This class extends Exception. 
  * @author Chris Mottram
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class FITSException extends Exception
 {
 	/**
 	 * Revision Control System id string, showing the version of the Class
 	 */
-	public final static String RCSID = new String("$Id: FITSException.java,v 1.3 2005-06-07 13:24:05 cjm Exp $");
+	public final static String RCSID = new String("$Id: FITSException.java,v 1.4 2005-06-07 13:47:15 cjm Exp $");
 	/**
 	 * An exception that caused this exception to be generated.
 	 */
@@ -77,10 +77,25 @@ public class FITSException extends Exception
 		if(exception != null)
 			exception.printStackTrace(s);
 	}
+
+	/**
+	 * Overridden printStackTrace, that prints the creating exceptions stack if it is non-null.
+	 * NB printStackTrace() uses this method.
+	 * @param s The stream to write to.
+	 */
+	public void printStackTrace(PrintStream s)
+	{
+		super.printStackTrace(s);
+		if(exception != null)
+			exception.printStackTrace(s);
+	}
 }
 
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.3  2005/06/07 13:24:05  cjm
+// Fixed comments.
+//
 // Revision 1.2  2005/06/07 13:19:14  cjm
 // Changed method signature of overwritten printStackTrace.
 //
