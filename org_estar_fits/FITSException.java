@@ -1,5 +1,5 @@
 // FITSException.java
-// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSException.java,v 1.2 2005-06-07 13:19:14 cjm Exp $
+// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSException.java,v 1.3 2005-06-07 13:24:05 cjm Exp $
 package org.estar.fits;
 
 import java.io.*;
@@ -7,14 +7,14 @@ import java.io.*;
 /**
  * This class extends Exception. 
  * @author Chris Mottram
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class FITSException extends Exception
 {
 	/**
 	 * Revision Control System id string, showing the version of the Class
 	 */
-	public final static String RCSID = new String("$Id: FITSException.java,v 1.2 2005-06-07 13:19:14 cjm Exp $");
+	public final static String RCSID = new String("$Id: FITSException.java,v 1.3 2005-06-07 13:24:05 cjm Exp $");
 	/**
 	 * An exception that caused this exception to be generated.
 	 */
@@ -32,7 +32,8 @@ public class FITSException extends Exception
 	/**
 	 * Constructor for the exception.
 	 * @param errorString The error string.
-	 * @param exception An exception that caused this exception to be generated.
+	 * @param e An exception that caused this exception to be generated.
+	 * @see #exception
 	 */
 	public FITSException(String errorString,Exception e)
 	{
@@ -51,8 +52,8 @@ public class FITSException extends Exception
 	}
 
 	/**
-	 * Overridden toString method, that calls super toString and adds errorString to it.
-	 * @see #errorString
+	 * Overridden toString method, that calls super toString and adds exception's toString to it.
+	 * @see #exception
 	 */
 	public String toString()
 	{
@@ -80,6 +81,9 @@ public class FITSException extends Exception
 
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.2  2005/06/07 13:19:14  cjm
+// Changed method signature of overwritten printStackTrace.
+//
 // Revision 1.1  2003/03/03 11:39:32  cjm
 // Initial revision
 //
