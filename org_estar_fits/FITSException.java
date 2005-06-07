@@ -1,18 +1,20 @@
 // FITSException.java
-// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSException.java,v 1.1 2003-03-03 11:39:32 cjm Exp $
+// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSException.java,v 1.2 2005-06-07 13:19:14 cjm Exp $
 package org.estar.fits;
+
+import java.io.*;
 
 /**
  * This class extends Exception. 
  * @author Chris Mottram
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class FITSException extends Exception
 {
 	/**
 	 * Revision Control System id string, showing the version of the Class
 	 */
-	public final static String RCSID = new String("$Id: FITSException.java,v 1.1 2003-03-03 11:39:32 cjm Exp $");
+	public final static String RCSID = new String("$Id: FITSException.java,v 1.2 2005-06-07 13:19:14 cjm Exp $");
 	/**
 	 * An exception that caused this exception to be generated.
 	 */
@@ -65,17 +67,22 @@ public class FITSException extends Exception
 
 	/**
 	 * Overridden printStackTrace, that prints the creating exceptions stack if it is non-null.
+	 * NB Logger.dumpStack uses this method.
+	 * @param s The writer to write to.
 	 */
-	public void printStackTrace()
+	public void printStackTrace(PrintWriter s)
 	{
-		super.printStackTrace();
+		super.printStackTrace(s);
 		if(exception != null)
-			exception.printStackTrace();
+			exception.printStackTrace(s);
 	}
 }
 
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1  2003/03/03 11:39:32  cjm
+// Initial revision
+//
 // Revision 1.1  2003/02/24 13:19:56  cjm
 // Initial revision
 //
