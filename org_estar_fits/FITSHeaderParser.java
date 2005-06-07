@@ -1,5 +1,5 @@
 // FITSHeaderParser.java
-// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSHeaderParser.java,v 1.2 2003-05-19 15:09:11 cjm Exp $
+// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSHeaderParser.java,v 1.3 2005-06-07 13:44:06 cjm Exp $
 package org.estar.fits;
 
 import java.util.*;
@@ -9,14 +9,14 @@ import org.eso.fits.*;
  * This class parses FITS headers. It expects a string of the form returned in an RTML document, where each
  * keyword is on a separate line, but is not padded to the full 80 character width.
  * @author Chris Mottram
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class FITSHeaderParser
 {
 	/**
 	 * Revision control system version id.
 	 */
-	public final static String RCSID = "$Id: FITSHeaderParser.java,v 1.2 2003-05-19 15:09:11 cjm Exp $";
+	public final static String RCSID = "$Id: FITSHeaderParser.java,v 1.3 2005-06-07 13:44:06 cjm Exp $";
 	/**
 	 * The FITS header instance.
 	 */
@@ -104,7 +104,7 @@ public class FITSHeaderParser
 
 	/**
 	 * Get the value of the specified keyword.
-	 * @param A string representing the keyword name.
+	 * @param keyword A string representing the keyword name.
 	 * @return An object representing the keyword's value. Can be of class: Boolean,String,Date,Integer,Double,
 	 *         or null if no value.
 	 * @see #fitsHeader
@@ -150,7 +150,7 @@ public class FITSHeaderParser
 
 	/**
 	 * Get the boolean value of the specified keyword.
-	 * @param A string representing the keyword name.
+	 * @param keyword A string representing the keyword name.
 	 * @return The boolean value.
 	 * @exception NullPointerException Thrown if the keyword does not exist in the header.
 	 * @see #fitsHeader
@@ -172,7 +172,7 @@ public class FITSHeaderParser
 
 	/**
 	 * Get the date value of the specified keyword.
-	 * @param A string representing the keyword name.
+	 * @param keyword A string representing the keyword name.
 	 * @return The date value.
 	 * @exception NullPointerException Thrown if the keyword does not exist in the header.
 	 * @see #fitsHeader
@@ -194,7 +194,7 @@ public class FITSHeaderParser
 
 	/**
 	 * Get the integer value of the specified keyword.
-	 * @param A string representing the keyword name.
+	 * @param keyword A string representing the keyword name.
 	 * @return The integer value.
 	 * @exception NullPointerException Thrown if the keyword does not exist in the header.
 	 * @see #fitsHeader
@@ -216,7 +216,7 @@ public class FITSHeaderParser
 
 	/**
 	 * Get the double value of the specified keyword.
-	 * @param A string representing the keyword name.
+	 * @param keyword A string representing the keyword name.
 	 * @return The double value.
 	 * @exception NullPointerException Thrown if the keyword does not exist in the header.
 	 * @see #fitsHeader
@@ -238,7 +238,7 @@ public class FITSHeaderParser
 
 	/**
 	 * Get the String value of the specified keyword.
-	 * @param A string representing the keyword name.
+	 * @param keyword A string representing the keyword name.
 	 * @return The string value.
 	 * @exception NullPointerException Thrown if the keyword does not exist in the header.
 	 * @see #fitsHeader
@@ -285,6 +285,9 @@ public class FITSHeaderParser
 }
 /*
 ** $Log: not supported by cvs2svn $
+** Revision 1.2  2003/05/19 15:09:11  cjm
+** Lots of changes.
+**
 ** Revision 1.1  2003/03/03 11:39:32  cjm
 ** Initial revision
 **
