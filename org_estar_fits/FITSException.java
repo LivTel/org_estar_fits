@@ -1,5 +1,24 @@
+/*   
+    Copyright 2006, Astrophysics Research Institute, Liverpool John Moores University.
+
+    This file is part of org.estar.fits.
+
+    org.estar.fits is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    org.estar.fits is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with org.estar.fits; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 // FITSException.java
-// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSException.java,v 1.4 2005-06-07 13:47:15 cjm Exp $
+// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSException.java,v 1.5 2007-01-30 18:34:32 cjm Exp $
 package org.estar.fits;
 
 import java.io.*;
@@ -7,14 +26,14 @@ import java.io.*;
 /**
  * This class extends Exception. 
  * @author Chris Mottram
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class FITSException extends Exception
 {
 	/**
 	 * Revision Control System id string, showing the version of the Class
 	 */
-	public final static String RCSID = new String("$Id: FITSException.java,v 1.4 2005-06-07 13:47:15 cjm Exp $");
+	public final static String RCSID = new String("$Id: FITSException.java,v 1.5 2007-01-30 18:34:32 cjm Exp $");
 	/**
 	 * An exception that caused this exception to be generated.
 	 */
@@ -93,6 +112,10 @@ public class FITSException extends Exception
 
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.4  2005/06/07 13:47:15  cjm
+// Added printStackTrace(PrintStream).
+// This is used when calling printStackTrace().
+//
 // Revision 1.3  2005/06/07 13:24:05  cjm
 // Fixed comments.
 //

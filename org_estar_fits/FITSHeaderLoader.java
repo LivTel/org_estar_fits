@@ -1,5 +1,24 @@
+/*   
+    Copyright 2006, Astrophysics Research Institute, Liverpool John Moores University.
+
+    This file is part of org.estar.fits.
+
+    org.estar.fits is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    org.estar.fits is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with org.estar.fits; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 // FITSHeaderLoader.java
-// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSHeaderLoader.java,v 1.4 2005-06-07 15:21:31 cjm Exp $
+// $Header: /space/home/eng/cjm/cvs/org_estar_fits/FITSHeaderLoader.java,v 1.5 2007-01-30 18:34:33 cjm Exp $
 package org.estar.fits;
 
 import java.awt.*;
@@ -13,14 +32,14 @@ import org.estar.astrometry.*;
 /**
  * This class loads FITS image headers. The image data is <b>NOT</b> loaded.
  * @author Chris Mottram
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class FITSHeaderLoader
 {
 	/**
 	 * Revision control system version id.
 	 */
-	public final static String RCSID = "$Id: FITSHeaderLoader.java,v 1.4 2005-06-07 15:21:31 cjm Exp $";
+	public final static String RCSID = "$Id: FITSHeaderLoader.java,v 1.5 2007-01-30 18:34:33 cjm Exp $";
 	/**
 	 * The FITS file we are getting the header from.
 	 */
@@ -278,6 +297,9 @@ public class FITSHeaderLoader
 }
 /*
 ** $Log: not supported by cvs2svn $
+** Revision 1.4  2005/06/07 15:21:31  cjm
+** Added new main test program.
+**
 ** Revision 1.3  2005/06/03 10:29:50  cjm
 ** Load exception handling now passes in FitsException.
 **
