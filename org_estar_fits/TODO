@@ -1,0 +1,24 @@
+java.awt.image.DirectColorModel
+ DirectColorModel(int bits, int rmask, int gmask, int bmask) 
+
+java.awt.image.BufferedImage
+BufferedImage(int width, int height, int imageType) 
+TYPE_INT_RGB 
+TYPE_USHORT_GRAY 
+setData(Raster r) 
+
+java.awt.image.MemoryImageSource
+ int w = 100;
+        int h = 100;
+        int pix[] = new int[w * h];
+        int index = 0;
+        for (int y = 0; y < h; y++) {
+            int red = (y * 255) / (h - 1);
+            for (int x = 0; x < w; x++) {
+                int blue = (x * 255) / (w - 1);
+                pix[index++] = (255 << 24) | (red << 16) | blue;
+            }
+        }
+        Image img = createImage(new MemoryImageSource(w, h, pix, 0, w));
+ 
+ 
