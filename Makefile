@@ -7,7 +7,7 @@ FITS_NAME	=fits
 PACKAGEDIR 	=org/$(ESTAR_NAME)/$(FITS_NAME)
 PACKAGENAME	=org.$(ESTAR_NAME).$(FITS_NAME)
 JAR_FILE	=org_$(ESTAR_NAME)_$(FITS_NAME).jar
-JAVACFLAGS 	= -d $(LIBDIR) -sourcepath ../../../ -classpath $(LIBDIR):$(CLASSPATH)
+JAVACFLAGS 	=$(JAVAC_VERSION_FLAGS) -d $(LIBDIR) -sourcepath ../../../ -classpath $(LIBDIR):$(CLASSPATH)
 DOCSDIR 	= $(ESTAR_DOC_HOME)/javadocs/$(PACKAGEDIR)
 
 SRCS = FITSException.java FITSHeaderParser.java FITSHeaderLoader.java FITSImage.java

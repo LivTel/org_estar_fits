@@ -28,14 +28,14 @@ import org.eso.fits.*;
  * This class parses FITS headers. It expects a string of the form returned in an RTML document, where each
  * keyword is on a separate line, but is not padded to the full 80 character width.
  * @author Chris Mottram
- * @version $Revision: 1.4 $
+ * @version $Revision$
  */
 public class FITSHeaderParser
 {
 	/**
 	 * Revision control system version id.
 	 */
-	public final static String RCSID = "$Id: FITSHeaderParser.java,v 1.4 2007-01-30 18:34:34 cjm Exp $";
+	public final static String RCSID = "$Id$";
 	/**
 	 * The FITS header instance.
 	 */

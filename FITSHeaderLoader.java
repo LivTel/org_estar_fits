@@ -32,14 +32,14 @@ import org.estar.astrometry.*;
 /**
  * This class loads FITS image headers. The image data is <b>NOT</b> loaded.
  * @author Chris Mottram
- * @version $Revision: 1.5 $
+ * @version $Revision$
  */
 public class FITSHeaderLoader
 {
 	/**
 	 * Revision control system version id.
 	 */
-	public final static String RCSID = "$Id: FITSHeaderLoader.java,v 1.5 2007-01-30 18:34:33 cjm Exp $";
+	public final static String RCSID = "$Id$";
 	/**
 	 * The FITS file we are getting the header from.
 	 */

@@ -26,14 +26,14 @@ import java.io.*;
 /**
  * This class extends Exception. 
  * @author Chris Mottram
- * @version $Revision: 1.5 $
+ * @version $Revision$
  */
 public class FITSException extends Exception
 {
 	/**
 	 * Revision Control System id string, showing the version of the Class
 	 */
-	public final static String RCSID = new String("$Id: FITSException.java,v 1.5 2007-01-30 18:34:32 cjm Exp $");
+	public final static String RCSID = new String("$Id$");
 	/**
 	 * An exception that caused this exception to be generated.
 	 */

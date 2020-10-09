@@ -35,14 +35,14 @@ import org.estar.astrometry.*;
  * A MemoryImageSource can be returned. There are various ulility routine for pixel <-> RA/Dec conversion
  * (assuming linear plate scaling), and access routines to various fits header data.
  * @author Chris Mottram
- * @version $Revision: 1.4 $
+ * @version $Revision$
  */
 public class FITSImage
 {
 	/**
 	 * Revision control system version id.
 	 */
-	public final static String RCSID = "$Id: FITSImage.java,v 1.4 2007-01-30 18:34:35 cjm Exp $";
+	public final static String RCSID = "$Id$";
 	/**
 	 * Width of image.
 	 */
